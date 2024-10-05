@@ -1,0 +1,6 @@
+pipline{
+    agent any
+    stages{
+        stage("")
+    }
+}

@@ -1,0 +1,12 @@
+services:
+  front:
+    build:
+      context: ./front-end-nextjs
+    ports:
+      - "3000:3000"
+  
+  api:
+    build: 
+      context: ./api
+    ports:
+      - "3001:80"

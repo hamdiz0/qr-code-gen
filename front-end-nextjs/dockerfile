@@ -1,0 +1,32 @@
+#stage 1
+FROM node:18-slim AS builder
+
+RUN apt-get update && \
+    apt-get autoremove --purge
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci && \
+npm cache clean --force
+
+COPY . .
+
+RUN npm run build
+
+# Stage 2
+FROM node:18-slim
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --production && \
+npm cache clean --force
+# copy the built application from the builder stage
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/next.config.js ./next.config.js
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
