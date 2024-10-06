@@ -1,9 +1,13 @@
 pipeline{
     agent any
+    tools {
+        nodejs "nodejs-22.9"
+    }
     stages{
         stage("build"){
             steps{
-                echo "hello"
+                echo "npm --version &&\
+                      node --version "
             }
         }
     }
