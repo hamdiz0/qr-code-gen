@@ -6,7 +6,9 @@ pipeline{
     }
     stages{
         stage("init"){
-            gscript = load "script.groovy"
+            steps{
+                gscript = load "script.groovy"
+            }
         }
         stage("build-front"){
             steps{
