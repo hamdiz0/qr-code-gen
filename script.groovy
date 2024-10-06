@@ -10,7 +10,7 @@ def front_build () {
         docker push hamdiz0/qr-front:1.0'
     }
 }
-def back-build () {
+def back_build () {
     echo "building the back-end docker image..."
     withCredentials([usernamePassword(
         credentialsId: 'docker-repo', 
