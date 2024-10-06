@@ -1,14 +1,22 @@
+def gscript
 pipeline{
     agent any
     tools {
         nodejs "nodejs-22.9"
     }
     stages{
-        stage("build"){
+        stage("init"){
+            gscript = load "script.groovy"
+        }
+        stage("build-front"){
             steps{
-                sh "npm --version &&\
-                    node --version "
+                gscript.front_build()
             }
         }
+        stage("build-api"){
+            steps{
+                gscript.back_build()
+            }
+        }    
     }
 }
