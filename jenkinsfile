@@ -7,17 +7,17 @@ pipeline{
     stages{
         stage("init"){
             steps{
-                gscript = load "script.groovy"
+                script{gscript = load "script.groovy"}
             }
         }
         stage("build-front"){
             steps{
-                gscript.front_build()
+                script{gscript.front_build()}
             }
         }
         stage("build-api"){
             steps{
-                gscript.back_build()
+                script{gscript.back_build()}
             }
         }    
     }
