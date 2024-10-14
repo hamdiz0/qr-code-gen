@@ -1,5 +1,7 @@
 # Qr-code-generator
 
+<img src="./imgs/qr-code.PNG" style="width:100% ; height:700px">
+
 ## Description
 
 <a href="https://github.com/rishabkumar7/devops-qr-code">based on devops-qr-code</a>
@@ -20,6 +22,8 @@ Build and pushed images to docker hub using jenkins :
     - hamdiz0/qr-front
     - hamdiz0/qr-api
     - hamdiz0/qr-api
+
+<img src="./imgs/pushed with jenkins.PNG" style="width:100% ; height:700px">
 
 ## Runing the app
 
