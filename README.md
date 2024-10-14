@@ -1,6 +1,6 @@
 # Qr-code-generator
 
-<img src="./imgs/qr-code.PNG" style="width:100% ; height:700px">
+<img src="./imgs/qr-code.PNG" style="width:100%">
 
 ## Description
 
@@ -23,7 +23,7 @@ Build and pushed images to docker hub using jenkins :
     - hamdiz0/qr-api
     - hamdiz0/qr-api
 
-<img src="./imgs/pushed with jenkins.PNG" style="width:100% ; height:700px">
+<img src="./imgs/pushed with jenkins.PNG" style="width:100%">
 
 ## Runing the app
 
