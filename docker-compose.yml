@@ -1,12 +1,29 @@
 services:
   front:
     build:
-      context: ./front-end-nextjs
+      context: ./front
     ports:
-      - "3000:3000"
+      - "3000:80"
+    depends_on:
+      - api
+
+
+  db:
+    build:
+      context: ./db
+    environment:
+      POSTGRES_DB: qrdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+
   
   api:
     build: 
       context: ./api
     ports:
       - "3001:80"
+
+volumes:
+  db-data:

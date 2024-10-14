@@ -1,9 +1,6 @@
 def gscript
 pipeline{
     agent any
-    tools {
-        nodejs "nodejs-22.9"
-    }
     stages{
         stage("init"){
             steps{

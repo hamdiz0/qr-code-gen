@@ -1,7 +1,8 @@
-'use client'
+'use client';
 
 import { useState } from 'react';
 import axios from 'axios';
+import Head from 'next/head';
 
 export default function Home() {
   const [url, setUrl] = useState('');
@@ -10,16 +11,28 @@ export default function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:8000/generate-qr/?url=${url}`);
-      setQrCodeUrl(response.data.qr_code_url);
+      const response = await axios.post(`http://localhost:3001/generate-qr/?url=${encodeURIComponent(url)}`, null, {
+        responseType: 'blob',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      const blob = new Blob([response.data], { type: 'image/png' });
+      const qrCodeImageUrl = URL.createObjectURL(blob);
+      setQrCodeUrl(qrCodeImageUrl);
     } catch (error) {
       console.error('Error generating QR Code:', error);
     }
   };
 
   return (
+  <>
+    <head>
+        <title>QR Code Generator</title> {/* Page Title */}
+    </head>
+  
     <div style={styles.container}>
-      
       <h1 style={styles.title}>QR Generator</h1>
       <form onSubmit={handleSubmit} style={styles.form}>
         <input
@@ -33,6 +46,7 @@ export default function Home() {
       </form>
       {qrCodeUrl && <img src={qrCodeUrl} alt="QR Code" style={styles.qrCode} />}
     </div>
+  </>
   );
 }
 
@@ -52,12 +66,12 @@ const styles = {
     lineHeight: '1.15',
     fontSize: '3rem',
     textAlign: 'left',
-    position:'absolute',
-    top:'0',
-    width:'100%',
-    backgroundColor:'#00ab00',
-    color:'#1e1e1e',
-    padding:'5px'
+    position: 'absolute',
+    top: '0',
+    width: '100%',
+    backgroundColor: '#00ab00',
+    color: '#1e1e1e',
+    padding: '5px'
   },
   form: {
     display: 'flex',
@@ -71,7 +85,6 @@ const styles = {
     marginTop: '20px',
     width: '300px',
     color: '#121212'
-
   },
   button: {
     padding: '10px 20px',
@@ -85,5 +98,6 @@ const styles = {
   },
   qrCode: {
     marginTop: '20px',
+    maxWidth: '100%', // Ensure the image is responsive
   },
 };
