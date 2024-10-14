@@ -10,17 +10,17 @@ pipeline{
         }
         stage("build-front"){
             steps{
-                script{gscript.image_build('hamdiz0/qr-front','1.0','docker-repo','./front')}
+                script{gscript.image_build('hamdiz0/qr-front','latest','docker-repo','./front')}
             }
         }
         stage("build-api"){
             steps{
-                script{gscript.image_build('hamdiz0/qr-api','1.0','docker-repo','./api')}
+                script{gscript.image_build('hamdiz0/qr-api','latest','docker-repo','./api')}
             }
         }
         stage("build-db"){
             steps{
-                script{gscript.image_build('hamdiz0/qr-db','1.0','docker-repo','./db')}
+                script{gscript.image_build('hamdiz0/qr-db','latest','docker-repo','./db')}
             }
         }   
     }
