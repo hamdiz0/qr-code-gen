@@ -1,4 +1,6 @@
-# qr-code-gen
+# Qr-code-generator
+
+## Description
 
 <a href="https://github.com/rishabkumar7/devops-qr-code">based on devops-qr-code</a>
 
@@ -18,3 +20,9 @@ Build and pushed images to docker hub using jenkins :
     - hamdiz0/qr-front
     - hamdiz0/qr-api
     - hamdiz0/qr-api
+
+## Runing the app
+
+Docker and docker compose must installed :
+    - docker compose up
+
