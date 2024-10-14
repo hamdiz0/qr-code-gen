@@ -1,0 +1,26 @@
+services:
+  front:
+    image: hamdiz0/qr-front
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+
+
+  db:
+    image: hamdiz0/qr-db
+    environment:
+      POSTGRES_DB: qrdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+
+  
+  api:
+    image: hamdiz0/qr-api
+    ports:
+      - "3001:80"
+
+volumes:
+  db-data:
