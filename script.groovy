@@ -1,25 +1,12 @@
-def front_build () {
-    echo "building the front-end docker image..."
+def image_build (String imageName ,String version ,String cred ,String dockerfilelocation) {
     withCredentials([usernamePassword(
         credentialsId: 'docker-repo', 
         usernameVariable: 'USER',
         passwordVariable: 'PASSWORD'
         )]) {
-        sh 'docker build front/ -t hamdiz0/qr-front:1.0 && \
-        echo $PASSWORD | docker login -u $USER --password-stdin && \
-        docker push hamdiz0/qr-front:1.0'
-    }
-}
-def back_build () {
-    echo "building the back-end docker image..."
-    withCredentials([usernamePassword(
-        credentialsId: 'docker-repo', 
-        usernameVariable: 'USER',
-        passwordVariable: 'PASSWORD'
-        )]) {
-        sh 'docker build api/ -t hamdiz0/qr-api:1.0 && \
-        echo $PASSWORD | docker login -u $USER --password-stdin && \
-        docker push hamdiz0/qr-api:1.0'
+        sh "docker build $dockerfilelocation -t $imageName:$version"
+        sh "echo $PASSWORD | docker login -u $USER --password-stdin"
+        sh "docker push $imageName:$version"
     }
 }
 
