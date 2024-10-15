@@ -27,7 +27,7 @@ Build and pushed images to docker hub using jenkins :
 
 ## Runing the app
 
-Docker and docker compose must installed :
+Docker and docker compose must be installed :
 
     - docker compose up
     - docker compose up -f ./docker-compose-images
