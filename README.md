@@ -1,6 +1,6 @@
 # Qr-Code-Generator
 
-<img src="./imgs/qr-code.PNG" style="width:100%">
+<img src='./imgs/qr-code.PNG' style="width:100%">
 
 ## Description
 
