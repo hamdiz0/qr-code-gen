@@ -4,7 +4,7 @@
 
 ## Description
 
-<a href="https://github.com/rishabkumar7/devops-qr-code">based on devops-qr-code</a>
+<a href='https://github.com/rishabkumar7/devops-qr-code'>based on devops-qr-code</a>
 
 A containerized app that generates QR codes with urls as an input :
 
