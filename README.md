@@ -21,7 +21,7 @@ Build and pushed images to docker hub using jenkins :
 
     - hamdiz0/qr-front
     - hamdiz0/qr-api
-    - hamdiz0/qr-api
+    - hamdiz0/qr-db
 
 <img src="./imgs/pushed with jenkins.PNG" style="width:100%">
 
