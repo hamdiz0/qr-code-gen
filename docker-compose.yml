@@ -17,11 +17,15 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - "db-data:/var/lib/postgresql/data"
-
   
   api:
     build: 
       context: ./api
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: qrdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "3001:80"
 

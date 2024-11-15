@@ -22,11 +22,11 @@ app.add_middleware(
 )
 
 # PostgreSQL configuration
-db_host = os.getenv('POSTGRES_HOST', 'db')
-db_name = os.getenv('POSTGRES_DB', 'qrdb')
-db_user = os.getenv('POSTGRES_USER', 'postgres')
-db_password = os.getenv('POSTGRES_PASSWORD', 'postgres')
-db_port = os.getenv('POSTGRES_PORT', '5432')
+db_host = os.getenv('POSTGRES_HOST')
+db_name = os.getenv('POSTGRES_DB')
+db_user = os.getenv('POSTGRES_USER')
+db_password = os.getenv('POSTGRES_PASSWORD')
+db_port = os.getenv('POSTGRES_PORT')
 
 # Database connection
 try:
