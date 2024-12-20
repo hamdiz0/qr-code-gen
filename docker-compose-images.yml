@@ -19,6 +19,12 @@ services:
   
   api:
     image: hamdiz0/qr-api
+    environment:
+      CORS_ORIGIN: "*" # allow all traffic to use this api
+      POSTGRES_HOST: db
+      POSTGRES_DB: qrdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "3001:80"
 

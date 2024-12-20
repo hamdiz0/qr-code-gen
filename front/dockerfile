@@ -1,34 +1,32 @@
-#stage 1
-FROM node:18-slim AS builder
-
-RUN apt-get update && \
-    apt-get autoremove --purge
+# build image
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci && \
-npm cache clean --force
+
+RUN npm ci --odit=dev ; npm cache clean --force
 
 COPY . .
 
 RUN npm run build
 
-# Stage 2
-FROM node:18-slim
+# base image
+FROM alpine
+
+RUN apk add nodejs
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci --production && \
-npm cache clean --force
+COPY --from=builder /app/node_modules ./node_modules
+
 # copy the built application from the builder stage
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.js ./next.config.js
 
-ENV PORT 80    
+ENV PORT=80    
 
 EXPOSE 80
 
-CMD ["npm", "start"]
+CMD ["node", "./node_modules/.bin/next", "start"]

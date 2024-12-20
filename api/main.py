@@ -7,15 +7,20 @@ import os
 from fastapi.responses import StreamingResponse
 import logging
 from dotenv import load_dotenv
+import os
 
 # Load environment variables
 load_dotenv()
 
 app = FastAPI()
 
+CORS_ORIGIN = os.getenv("CORS_ORIGIN") 
+
+app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[CORS_ORIGIN],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

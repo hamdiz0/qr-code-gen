@@ -7,11 +7,11 @@ import Head from 'next/head';
 export default function Home() {
   const [url, setUrl] = useState('');
   const [qrCodeUrl, setQrCodeUrl] = useState('');
-
+  console
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:3001/generate-qr/?url=${encodeURIComponent(url)}`, null, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/generate-qr/?url=${encodeURIComponent(url)}`, null, {
         responseType: 'blob',
         headers: {
           'Content-Type': 'application/json'

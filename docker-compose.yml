@@ -22,6 +22,7 @@ services:
     build: 
       context: ./api
     environment:
+      CORS_ORIGIN: "*" # allow all traffic to use this api
       POSTGRES_HOST: db
       POSTGRES_DB: qrdb
       POSTGRES_USER: postgres
