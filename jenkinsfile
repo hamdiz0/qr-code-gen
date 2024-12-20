@@ -18,10 +18,5 @@ pipeline{
                 script{gscript.image_build('hamdiz0/qr-api','latest','docker-repo','./api')}
             }
         }
-        stage("build-db"){
-            steps{
-                script{gscript.image_build('hamdiz0/qr-db','latest','docker-repo','./db')}
-            }
-        }   
     }
 }
