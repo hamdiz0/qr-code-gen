@@ -7,7 +7,6 @@ import Head from 'next/head';
 export default function Home() {
   const [url, setUrl] = useState('');
   const [qrCodeUrl, setQrCodeUrl] = useState('');
-  console
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
