@@ -10,7 +10,7 @@ metadata:
     app: qr-code-app
 
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       name: api-pod
@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name : api
-          image: hamdiz0/qr-api:<<VERSION>> 
+          image: hamdiz0/qr-api:latest 
           ports :
           - containerPort: 80
 
@@ -39,8 +39,7 @@ spec:
   selector:
     name: api-pod
     app: qr-code-app
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 80
       targetPort: 80
-      nodePort: 30000

@@ -30,29 +30,23 @@ minikube kubectl -- rollout status all
 
 echo -e "\nkubectl get all :\n"
 minikube kubectl -- get all
-echo -e "\nvote-url:\n"
-minikube service -- vote-svc --url
-echo -e "\nresult-url:\n"
-minikube service -- result-svc --url
+echo -e "\nfront-url:\n"
+minikube service -- front-svc --url
+
 
 
 # terminate old forwarding process to avoid conflicts
 kill $(ps aux | grep 'kubectl port-forward' | awk '{print $2}')
 
 # port forwarding to access the service 
-minikube kubectl -- port-forward svc/vote-svc 30000:80 --address 0.0.0.0 > /dev/null 2>&1 &
+minikube kubectl -- port-forward svc/front-svc 30000:80 --address 0.0.0.0 > /dev/null 2>&1 &
 # get port forwarding proccess id
-VOTE_PID=$!
-
-minikube kubectl -- port-forward svc/result-svc 30001:80 --address 0.0.0.0 > /dev/null 2>&1 &
-# get port forwarding proccess id
-RESULT_PID=$!
+FRONT_PID=$!
 
 # disown the processes so they won't terminate when the script ends
-disown $VOTE_PID
-disown $RESULT_PID
+disown $FRONT_PID
 
 # if you don't disown the forwarding process the script will stay in an execution state and the jenkins build wont end
 
-echo "port forwarding started for vote-svc on 30000 and result-svc on 30001."
+echo "port forwarding started for front-svc on 30000 "
 

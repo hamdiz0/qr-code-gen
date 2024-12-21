@@ -10,7 +10,7 @@ metadata:
     app: qr-code-app
 
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       name: front-pod
@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name : vote
-          image: hamdiz0/qr-front:<<VERSION>> 
+          image: hamdiz0/qr-front:latest 
           ports :
           - containerPort: 80
 
