@@ -1,6 +1,6 @@
 // build & push function
-// build(DockerHub Profile/imageName , version , credentialId from jenkins , Dockerfile path)
-def build(String imageName ,String version ,String credId ,String dockerfilelocation){
+// image_build(DockerHub Profile/imageName , version , credentialId from jenkins , Dockerfile path)
+def image_build(String imageName ,String version ,String credId ,String dockerfilelocation){
     withCredentials([
         usernamePassword(
             credentialsId: "$credId",
