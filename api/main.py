@@ -122,3 +122,6 @@ async def generate_qr(url: str = Query(..., description="The URL to encode in th
         except Exception as e:
             print(f"Database error: {e}")
             raise HTTPException(status_code=500, detail=str(e))
+@app.get("/")
+def read_root():
+    return {"message": "QR Code Generator API"}

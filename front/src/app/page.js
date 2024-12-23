@@ -10,7 +10,7 @@ export default function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/generate-qr/?url=${encodeURIComponent(url)}`, null, {
+      const response = await axios.post(`api/generate-qr?url=${encodeURIComponent(url)}`, null, {
         responseType: 'blob',
         headers: {
           'Content-Type': 'application/json'
