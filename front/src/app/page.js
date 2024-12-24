@@ -2,21 +2,31 @@
 
 import { useState } from 'react';
 import axios from 'axios';
-import Head from 'next/head';
 
 export default function Home() {
   const [url, setUrl] = useState('');
   const [qrCodeUrl, setQrCodeUrl] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await axios.post(`api/generate-qr?url=${encodeURIComponent(url)}`, null, {
+      const useInternalRoute = process.env.NEXT_PUBLIC_USE_INTERNAL_ROUTE;  // switch between internal and external routing
+      const apiUrl = useInternalRoute
+        ? '/api/generate-qr'                                                // internal route handled by Next.js
+        : `${process.env.NEXT_PUBLIC_EXTERNAL_API}/generate-qr`;            // external route from environment variable
+
+      if (!apiUrl) {
+        throw new Error('API URL is not configured');
+      }
+
+      const response = await axios.post(`${apiUrl}?url=${encodeURIComponent(url)}`, null, {
         responseType: 'blob',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       });
-      
+
       const blob = new Blob([response.data], { type: 'image/png' });
       const qrCodeImageUrl = URL.createObjectURL(blob);
       setQrCodeUrl(qrCodeImageUrl);
@@ -32,7 +42,7 @@ export default function Home() {
     </head>
   
     <div style={styles.container}>
-      <h1 style={styles.title}>QR Generator</h1>
+      <h1 style={styles.title}>QR Code Generator</h1>
       <form onSubmit={handleSubmit} style={styles.form}>
         <input
           type="text"
@@ -70,7 +80,7 @@ const styles = {
     width: '100%',
     backgroundColor: '#00ab00',
     color: '#1e1e1e',
-    padding: '5px'
+    padding: '5px',
   },
   form: {
     display: 'flex',

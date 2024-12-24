@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 
 export async function POST(request) {
+  const useInternalRoute = process.env.NEXT_PUBLIC_USE_INTERNAL_ROUTE;
   const { searchParams } = new URL(request.url);
   const url = searchParams.get('url');
 
@@ -9,17 +10,25 @@ export async function POST(request) {
     return NextResponse.json({ error: 'URL is required' }, { status: 400 });
   }
 
+  const apiUrl = useInternalRoute
+    ? process.env.NEXT_PUBLIC_INTERNAL_API
+    : process.env.NEXT_PUBLIC_EXTERNAL_API;
+
+  if (!apiUrl) {
+    return NextResponse.json({ error: 'API base URL is not configured' }, { status: 500 });
+  }
+
   try {
-    // Request the QR code image from the external API
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/generate-qr/?url=${encodeURIComponent(url)}`,
+      `${apiUrl}/generate-qr/?url=${encodeURIComponent(url)}`,
       null,
-      { responseType: 'arraybuffer' } // Ensure we get binary data
+      { responseType: 'arraybuffer' }
     );
 
-    // Create a response with the binary data and the correct content type
     return new NextResponse(response.data, {
-      headers: {'Content-Type': 'image/png',},
+      headers: {
+        'Content-Type': 'image/png',
+      },
     });
   } catch (error) {
     console.error('Error generating QR Code:', error);

@@ -2,7 +2,8 @@
 
 Based on <a href='https://github.com/rishabkumar7/devops-qr-code'>devops-qr-code</a>
 
-A containerized app that generates QR codes with urls as an input 
+This app generates QR codes based on input URLs. 
+It is designed to be flexible, working seamlessly in both internal environments like Kubernetes and external deployments on platforms like Vercel and Render by using NextJS routing features along with environment variables to switch between the two modes
 
 * Front-End built with NextJs
 * Api built with python FastApi
@@ -28,10 +29,27 @@ The user enters a url and click the button to send the url to the api ,the api c
 
  ## `Runing the app using docker-compose` :
 
-* using the Docker files <a href="./docker-compose.yml">view file here</a> :
-  - docker compose up --build
-* using the docker images from DockerHub <a href="./docker-compose-images.yml">view file here</a> :
-  - docker compose up -f ./docker-compose-images.yml up
+* make sure to set up the right enviroment variables in the <a href="./front/.env">.env</a> file for the internal docker compose environmnet
+  ```
+  NEXT_PUBLIC_USE_INTERNAL_ROUTE=true
+  NEXT_PUBLIC_INTERNAL_API=http://api ("api" is the service name for the api in the docker-compose.yml)
+  ```
+
+* the external network can be used but it's not practicle for this case 
+  ```
+  NEXT_PUBLIC_USE_INTERNAL_ROUTE=false
+  NEXT_PUBLIC_EXTERNAL_API=http://localhost:3001 (the api service must be forwarded for this to work)
+  ```
+
+* run the app using the Docker files in build/context folders <a href="./docker-compose.yml">view file here</a> :
+  ```
+  docker compose up --build
+  ```
+
+* run the app using the docker images from DockerHub <a href="./docker-compose-images.yml">view file here</a> :
+  ```
+  docker compose up -f ./docker-compose-images.yml up
+  ```
 
 ## `Deploying the app using render and vercel` :
 
@@ -41,7 +59,15 @@ The user enters a url and click the button to send the url to the api ,the api c
 * choose the right directory containing the front end files
 * make sure to select the NextJs framework
 
-<img src="./imgs/vercel.png" style="width:100%">
+  <img src="./imgs/vercel.png" style="width:100%">
+
+* add the necessary environment variables for the external routing mode in `Settings/Environment Varaibles`
+  ```
+  NEXT_PUBLIC_USE_INTERNAL_ROUTE=true
+  NEXT_PUBLIC_EXTERNAL_API=an external api url "https://api.onrender.com"
+  ```
+
+  <img src="./imgs/vercel-env.png" style="width:100%">
 
 ### `deploying both the api and postgres db on render` :
 
