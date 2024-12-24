@@ -119,12 +119,11 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '200px',
-    width: '200px',
+    maxWidth: "350px"
   },
-  qrCode: {
-    maxWidth: '100%', // Ensure the image is responsive
-    maxHeight: '100%',
+  qrCode: { 
+    marginTop: '20px', 
+    maxWidth: '100%'
   },
   spinner: {
     width: '50px',
@@ -136,15 +135,6 @@ const styles = {
     animation: 'spin 1s linear infinite',
   },
 };
-
-// Add spinner animation
-const spinnerStyle = `
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-`;
-
 export const globalStyles = () => (
   <style>
     {spinnerStyle}
