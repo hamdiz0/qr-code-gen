@@ -1,0 +1,46 @@
+---
+# front-deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-deployment
+  labels:
+    name: front-deployment
+    app: qr-code-app
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: front-pod
+      app: qr-code-app
+  template:
+    metadata:
+      labels:
+        name: front-pod
+        app: qr-code-app
+    spec:
+      containers:
+        - name : front
+          image: hamdiz0/qr-front
+          ports :
+          - containerPort: 80
+
+---
+# front-service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: front
+
+spec:
+  selector:
+    name: front-pod
+    app: qr-code-app
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30000
