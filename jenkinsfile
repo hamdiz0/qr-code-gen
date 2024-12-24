@@ -23,7 +23,7 @@ pipeline{
                         ['api','./api'],
                     ] 
                     gs.build(
-                        '',                                     // repo url
+                        'hamdiz0',                                     // repo url
                         env.VERSION,                            // Version
                         'docker-repo',                          // Credentail Id for docker repo from jenkins 
                         ImageName_DockerFileLocation            // List of pairs (Image Name along with Docker File Location)
@@ -36,7 +36,7 @@ pipeline{
                 script{
                     ImageNames=['front','api']
                     gs.push(
-                        '',                                     // repo url
+                        'hamdiz0',                                     // repo url
                         env.VERSION,                            // Version
                         'docker-repo',                          // Credentail Id for docker repo from jenkins 
                         ImageNames                              // List of Image Names
