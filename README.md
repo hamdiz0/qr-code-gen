@@ -50,6 +50,16 @@ The user enters a url and click the button to send the url to the api ,the api c
   ```
   docker compose up -f ./docker-compose-images.yml up
   ```
+## YAML files :
+
+* set up a deployment with its corresponding service for each component of the app
+  - <a href="./k8s-specifications/front-deployment_svc.yml">front-end</a>
+  - <a href="./k8s-specifications/api-deployment_svc.yml">api</a>
+  - <a href="./k8s-specifications/postgres-deployment_svc.yml">postgres</a>
+
+* utilized a script to manually deploy and test the app on the k8s cluster
+    - view the `run.sh` script <a href="./k8s-manifests/run.sh">here</a>
+    - view the YAML files <a href="./k8s-manifests">here</a>
 
 ## `Deploying the app using render and vercel` :
 

@@ -1,21 +1,67 @@
-def gscript
+def gs
 
 pipeline{
     agent any
+
+    environment {
+        VERSION = "1.0.$BUILD_NUMBER"
+    }
+
     stages{
-        stage("init"){
+        stage("load script"){
             steps{
-                script{gscript = load "script.groovy"}
+                script{
+                    gs = load "script.groovy"
+                }
             }
         }
-        stage("build-front"){
+        stage("build images"){
             steps{
-                script{gscript.image_build('hamdiz0/qr-front','latest','docker-repo','./front')}
+                script{
+                    ImageName_DockerFileLocation = [
+                        ['front','./front'],
+                        ['api','./api'],
+                    ] 
+                    gs.build(
+                        '',                                     // repo url
+                        env.VERSION,                            // Version
+                        'docker-repo',                          // Credentail Id for docker repo from jenkins 
+                        ImageName_DockerFileLocation            // List of pairs (Image Name along with Docker File Location)
+                    )
+                }
             }
         }
-        stage("build-api"){
+        stage("push images"){
             steps{
-                script{gscript.image_build('hamdiz0/qr-api','latest','docker-repo','./api')}
+                script{
+                    ImageNames=['front','api']
+                    gs.push(
+                        '',                                     // repo url
+                        env.VERSION,                            // Version
+                        'docker-repo',                          // Credentail Id for docker repo from jenkins 
+                        ImageNames                              // List of Image Names
+                    )
+                }
+            }
+        }
+        stage("update version"){
+            steps {
+                sh """
+                    cd ./k8s-manifests
+                    ./change_version.sh -v $VERSION
+                """
+            }
+        } 
+        stage("push changes"){
+            steps {
+                script {
+                    gs.git_push(
+                        'github.com/hamdiz0/qr-code-generator',     //url without "https://"
+                        'github-api-token',                         //credentialsId
+                        "updated to version ${VERSION}",            //commit message
+                        'main'                                      //branch
+                    )
+                }
             }
         }
     }
