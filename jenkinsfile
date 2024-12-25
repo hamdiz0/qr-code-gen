@@ -48,6 +48,7 @@ pipeline{
             steps {
                 sh """
                     cd ./k8s-manifests
+                    chmod +x change_version.sh
                     ./change_version.sh -v $VERSION
                 """
             }
