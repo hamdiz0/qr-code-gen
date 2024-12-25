@@ -19,8 +19,8 @@ pipeline{
             steps{
                 script{
                     ImageName_DockerFileLocation = [
-                        ['front','./front'],
-                        ['api','./api'],
+                        ['qr-front','./front'],
+                        ['qr-api','./api'],
                     ] 
                     gs.build(
                         'hamdiz0',                              // repo url
@@ -34,7 +34,7 @@ pipeline{
         stage("push images"){
             steps{
                 script{
-                    ImageNames=['front','api']
+                    ImageNames=['qr-front','qr-api']
                     gs.push(
                         'hamdiz0',                              // repo url
                         env.VERSION,                            // Version
