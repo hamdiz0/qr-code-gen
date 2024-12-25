@@ -1,6 +1,7 @@
 #!/bin/bash
 
-version="latest" # default the version to latest
+# default the version to latest
+version="latest" 
 
 # accept version with -v 
 while getopts "v:" opt; do

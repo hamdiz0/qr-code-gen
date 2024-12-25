@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name : vote
-          image: hamdiz0/qr-api:1.0.1
+          image: hamdiz0/qr-api:1.0.0
           ports :
           - containerPort: 80
           env:

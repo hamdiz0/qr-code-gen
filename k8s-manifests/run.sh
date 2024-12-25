@@ -1,6 +1,7 @@
 #!/bin/bash
 
-DIR=. # set the directory to the default
+# set the directory to the default
+DIR=. 
 
 echo "applying k8s yaml files"
 
