@@ -4,7 +4,8 @@ pipeline{
     agent any
 
     environment {
-        VERSION = "1.0.1"
+        VERSION = "1.0.$BUILD_NUMBER"
+        KUBECONFIG = "/kubecfg/eks-cfg"
     }
 
     stages{
@@ -47,17 +48,29 @@ pipeline{
         stage("update version"){
             steps {
                 sh """
-                    cd ./k8s-manifests
+                    cd k8s-manifests
                     chmod +x change_version.sh
                     ./change_version.sh -v $VERSION
                 """
             }
-        } 
+        }
+        stage("deploy"){
+            steps {
+                script {
+                    sh """
+                        export KUBECONFIG=$KUBECONFIG
+                        cd k8s-manifests
+                        chmod +x deploy.sh
+                        ./deploy.sh
+                    """
+                }
+            }
+        }
         stage("push changes"){
             steps {
                 script {
                     gs.git_push(
-                        'github.com/hamdiz0/qr-code-generator',     //url without "https://"
+                        'github.com/hamdiz0/test-qr.git',           //url without "https://"
                         'github-api-token',                         //credentialsId
                         "updated to version ${VERSION}",            //commit message
                         'main'                                      //branch

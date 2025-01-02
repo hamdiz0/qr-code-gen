@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name : front
-          image: hamdiz0/qr-front:1.0.1
+          image: hamdiz0/qr-front:1.0.22
           ports :
           - containerPort: 80
 
@@ -39,8 +39,7 @@ spec:
   selector:
     name: front-pod
     app: qr-code-app
-  type: NodePort
+  type: LoadBalancer
   ports:
     - port: 80
       targetPort: 80
-      nodePort: 30000
