@@ -5,14 +5,31 @@ Based on <a href='https://github.com/rishabkumar7/devops-qr-code'>devops-qr-code
 This app generates QR codes based on input URLs. 
 It is designed to be flexible, working seamlessly in both internal environments like Kubernetes and external deployments on platforms like Vercel and Render by using NextJS routing features along with environment variables to switch between the two modes
 
-
-
+- [Prerequisites](#prerequisites-)
+- [Running the app using docker-compose](#running-the-app-using-docker-compose-)
+- [Deploying an EKS cluster using Terraform](#deploying-an-eks-cluster-using-terraform-)
+- [Setting up Jenkins](#setting-up-jenkins-)
+- [YAML files](#yaml-files-)
+- [CI/CD Pipeline](#cicd-pipeline-)
+  - [CI Pipeline](#ci-pipeline-)
+    - [Building and Pushing the images](#building-and-pushing-the-images-)
+    - [Changing the YAML files image version](#changing-the-yaml-files-image-version-)
+    - [Pushing the version change](#pushing-the-version-change-)
+  - [CD Pipeline](#cd-pipeline-)
+- [Deploying the app using render and vercel](#deploying-the-app-using-render-and-vercel-)
+  - [Deploying the front end on vercel](#deploying-the-front-end-on-vercel-)
+  - [Deploying both the api and postgres db on render](#deploying-both-the-api-and-postgres-db-on-render-)
+    - [Setting a Postgres data base](#setting-a-postgres-data-base-)
+    - [Setting up the API](#setting-up-the-api-)
+- [Results](#results-)
+  - [EKS deployment](#eks-deployment-)
+  - [Vercel and Render deployment](#vercel-and-render-deployment-)
 
 * Front-End built with NextJs
 * Api built with python FastApi
 * Data Base created with postgres
 
-The user enters a url and click the button to send the url to the api ,the api checks if the url is present in the data-base or not :
+The user enters a url and clicks the button to send the url to the api ,the api checks if the url is present in the data-base or not :
 
 * if yes it retrieves the corresponding qr-code and sends it back to the user
 * if not it generates a qr-code sends it back to the user and save it in the data-base
@@ -63,6 +80,11 @@ The user enters a url and click the button to send the url to the api ,the api c
 * go to the eks console `EKS>Cluster>"eks-cluster-name">IAM access entries ` and add the user to the cluster with the necessary permissions :
 
     <img src="./imgs/entry.png" style="width:100%"/>
+  
+* The Terraform configuration is divided into three files:
+  - <a href="./terraform/eks.tf">eks.tf</a>: Contains the main configuration for the EKS cluster.
+  - <a href="./terraform/network.tf">network.tf</a>: Defines the network settings for the EKS cluster.
+  - <a href="./terraform/provider.tf">provider.tf</a>: Specifies the provider configuration for AWS.
 
 ## `Setting up Jenkins` :
 
@@ -249,7 +271,21 @@ The user enters a url and click the button to send the url to the api ,the api c
 
 <img src="./imgs/db-creds.png" style="width:100%">
 
-#### `Results` :
+## `Results` :
+
+### `EKS deployment` :
+
+<img src="./imgs/eks-1.png" style="width:100%">
+
+<img src="./imgs/eks-2.png" style="width:100%">
+
+<img src="./imgs/eks-3.png" style="width:100%">
+
+<img src="./imgs/jen.png" style="width:100%">
+
+<img src="./imgs/eks-4.png" style="width:100%">
+
+### `Vercel and Render deployment` :
 
 <img src="./imgs/1.png" style="width:100%">
 
