@@ -6,14 +6,14 @@ This app generates QR codes based on input URLs.
 It is designed to be flexible, working seamlessly in both internal environments like Kubernetes and external deployments on platforms like Vercel and Render by using NextJS routing features along with environment variables to switch between the two modes
 
 - [Prerequisites](#prerequisites-)
-- [Running the app using docker-compose](#running-the-app-using-docker-compose-)
+- [Running the app using docker-compose](#runing-the-app-using-docker-compose-)
 - [Deploying an EKS cluster using Terraform](#deploying-an-eks-cluster-using-terraform-)
 - [Setting up Jenkins](#setting-up-jenkins-)
 - [YAML files](#yaml-files-)
 - [CI/CD Pipeline](#cicd-pipeline-)
   - [CI Pipeline](#ci-pipeline-)
     - [Building and Pushing the images](#building-and-pushing-the-images-)
-    - [Changing the YAML files image version](#changing-the-yaml-files-image-version-)
+    - [Changing the YAML files image version](#changing-the-yaml-files-iamge-verion-)
     - [Pushing the version change](#pushing-the-version-change-)
   - [CD Pipeline](#cd-pipeline-)
 - [Deploying the app using render and vercel](#deploying-the-app-using-render-and-vercel-)
