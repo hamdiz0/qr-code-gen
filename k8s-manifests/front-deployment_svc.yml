@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name : front
-          image: hamdiz0/qr-front:1.0.22
+          image: hamdiz0/qr-front:1.0.28
           ports :
           - containerPort: 80
 
