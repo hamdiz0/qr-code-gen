@@ -47,7 +47,6 @@ def git_push(String url , String credId , String commitMsg, String branch){
             passwordVariable:'TOKEN'
         )]){
         sh "git remote set-url origin https://${USER}:${TOKEN}@$url"
-        sh "git pull origin $branch"
         sh "git status;git add ."
         sh "git commit -m \"${commitMsg}\"" 
         sh "git push origin HEAD:$branch"
