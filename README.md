@@ -5,6 +5,9 @@ Based on <a href='https://github.com/rishabkumar7/devops-qr-code'>devops-qr-code
 This app generates QR codes based on input URLs. 
 It is designed to be flexible, working seamlessly in both internal environments like Kubernetes and external deployments on platforms like Vercel and Render by using NextJS routing features along with environment variables to switch between the two modes
 
+
+
+
 * Front-End built with NextJs
 * Api built with python FastApi
 * Data Base created with postgres
@@ -16,16 +19,15 @@ The user enters a url and click the button to send the url to the api ,the api c
 
 <img src='./imgs/qr-code.PNG' style="width:100%">
 
-## `Containerizing the app` :
+## `Prerequisites` :
 
-* building and pushing both the front and api images to docker hub using <a href="./jenkinsfile">JenkinsFile</a> 
-* utilized a <a href="./script.groovy">Function</a> template to build and push the images 
-  - hamdiz0/qr-front:latest
-  - hamdiz0/qr-api:latest
-  - postgres:15-alpine (default)
-
-<img src="./imgs/pushed with jenkins.PNG" style="width:100%">
-
+* Docker
+* Docker-compose
+* AWS account (Free Tier)
+* Jenkins (as a container)
+* AWS-CLI
+* Kubectl
+* Terraform
 
  ## `Runing the app using docker-compose` :
 
@@ -50,16 +52,146 @@ The user enters a url and click the button to send the url to the api ,the api c
   ```
   docker compose up -f ./docker-compose-images.yml up
   ```
-## YAML files :
+
+## `Deploying an EKS cluster using Terraform` :
+
+* here is a quick setup guide on how to deploy an minimal EKS cluster using terraform :
+
+  - <a href="https://github.com/hamdiz0/eks-terraform-setup">view the guide here</a>
+
+* after creating the cluter make sure to add an access entry for the IAM user to access the cluster
+* go to the eks console `EKS>Cluster>"eks-cluster-name">IAM access entries ` and add the user to the cluster with the necessary permissions :
+
+    <img src="./imgs/entry.png" style="width:100%"/>
+
+## `Setting up Jenkins` :
+
+* follow this guide to set up jenkins as a container <a href="https://github.com/hamdiz0/LearningDevOps/blob/main/jenkins/README.md#doker-in-jenkins">Docker in Jenkins</a>
+
+* make sure docker is setup in jenkins (more details <a href="https://github.com/hamdiz0/Learning-DevOps/tree/main/jenkins#doker-in-jenkins">here</a>)
+
+* it's preferable to use a multibranch pipeline cause of the usefull plugins and features it provides
+
+* add "Multibranch Scan Webhook Trigger" plugin in jenkins 
+
+<img src='./imgs/trigger.png' style='width:100%'>
+
+* configure a webhook in the git repo webhook settings :
+    - `<jenkins-url>/multibranch-webhook-trigger/invoke?token=<token>`
+
+* more details about multibranch webhooks <a href="https://github.com/hamdiz0/Learning-DevOps/blob/main/jenkins/README.md#multibranch-triggers-">here</a>
+
+* install the aws cli in the jenkins container :
+    ```sh
+    docker exec -it jenkins bash
+    ```
+    ```sh
+    apt install unzip wget
+    wget "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+    unzip awscli-exe-linux-x86_64.zip
+    sudo ./aws/install
+    ```
+* configure the aws cli with the credentails of the IAM user used to cretae the EKS cluster or add a new user for jenkins with right permissions :
+    ```sh
+    aws configure
+    ```
+* verify the configuration :
+    ```sh
+    aws sts get-caller-identity
+    ```
+* install kubectl in the jenkins container :
+    ```sh
+    K8S_VERSION=1.32
+    apt-get update
+    apt-get install --quiet --yes apt-transport-https ca-certificates curl
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v${K8S_VERSION}/deb/Release.key | \
+    gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v${K8S_VERSION}/deb/ /" | \
+    tee /etc/apt/sources.list.d/kubernetes.list
+    apt-get update
+    apt-get install --quiet --yes kubectl
+    ```
+* update the kubeconfig file :
+
+  ```sh
+  aws eks --region <region> update-kubeconfig --name <cluster-name>
+  ```
+
+## `YAML files` :
 
 * set up a deployment with its corresponding service for each component of the app
-  - <a href="./k8s-specifications/front-deployment_svc.yml">front-end</a>
-  - <a href="./k8s-specifications/api-deployment_svc.yml">api</a>
-  - <a href="./k8s-specifications/postgres-deployment_svc.yml">postgres</a>
+  - <a href="./k8s-manifests/front-deployment_svc.yml">front-end</a> - (LoadBalancer)
+  - <a href="./k8s-manifests/api-deployment_svc.yml">api</a> - (ClusterIP)
+  - <a href="./k8s-manifests/postgres-deployment_svc.yml">postgres</a> - (ClusterIP)
 
-* utilized a script to manually deploy and test the app on the k8s cluster
-    - view the `run.sh` script <a href="./k8s-manifests/run.sh">here</a>
-    - view the YAML files <a href="./k8s-manifests">here</a>
+## `CI/CD Pipeline` :
+
+### `CI Pipeline` :
+
+#### `Building and Pushing the images` :
+
+* utilized two <a href="./script.groovy">Function Templates</a>  to build and push the images 
+  - hamdiz0/qr-front:latest
+  - hamdiz0/qr-api:latest
+  - postgres:15-alpine (default)
+
+<img src="./imgs/pushed with jenkins.PNG" style="width:100%">
+
+#### Changing the YAML files iamge verion :
+
+* utilized a script to change the demployment image version <a href="./k8s-manifests/change_version.sh">change_version.sh</a>
+* in the `update version` stage, Jenkins runs the script to change both the front-end and api image versions 
+    ```groovy
+    script {
+      sh """
+        cd k8s-manifests
+        chmod +x change_version.sh
+        ./change_version.sh -v $VERSION
+      """
+    }
+    ```
+### Pushing the version change :
+
+* set up jenkins to update the git repository with new version
+* set up a git `user.name` and `user.eamil` for Jenkins :
+    ```
+    docker exec -it jenkins bash
+    git config --global user.name "jenkins"
+    git config user.email "jenkins@jenkins.com"
+    ```
+* ustilized a function that adds and pushs changes to a git repository 
+    - view the function <a href="./script.groovy">here</a>
+* the function uses a git access token wish must be configured and added to jenkins as a `Username and Password` credential
+  - set up an access token in git hub :
+    <img src="./imgs/token.PNG" style="width:100%">
+* make sure to add the `Ignore Commiter Strategy` plugin and ignore jenkins pushes to avoid infinite build loops :
+      <img src="./imgs/avoid.PNG" style="width:100%">
+* example of using the function :
+    ```groovy
+    gs.git_push(
+        'github.com/hamdiz0/qr-code-generator',     // url without "https://"
+        'github-api-token',                         // credentialsId
+        "updated to version ${VERSION}",            // commit message
+        'main'                                      // branch
+    )
+    ```
+
+### `CD Pipeline` :
+
+* after the `updated version` stage the `deploy` stage is triggered 
+* the `deploy` stage runs the <a href="./k8s-manifests/deploy.sh">deploy.sh</a> script wich applies the changes to the `EKS` cluster :
+    ```groovy
+    script {
+      sh """
+          export KUBECONFIG=$KUBECONFIG  // eks kubeconfig's absolute path in the jenkins container
+          cd k8s-manifests               // change directory to the yaml files directory
+          chmod +x deploy.sh             // make the script executable
+          ./deploy.sh                    // run the script
+      """
+    }
+    ```
+* the yaml files must be in the same directory as the script
+
 
 ## `Deploying the app using render and vercel` :
 
