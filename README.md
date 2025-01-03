@@ -148,6 +148,8 @@ The user enters a url and clicks the button to send the url to the api ,the api 
 
 ## `CI/CD Pipeline` :
 
+  <img src="./imgs/arch.png" style="width:100%">
+
 ### `CI Pipeline` :
 
 #### `Building and Pushing the images` :
