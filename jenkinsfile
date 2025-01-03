@@ -70,7 +70,7 @@ pipeline{
             steps {
                 script {
                     gs.git_push(
-                        'github.com/hamdiz0/test-qr.git',           //url without "https://"
+                        'github.com/hamdiz0/qr-code-generator',     //url without "https://"
                         'github-api-token',                         //credentialsId
                         "updated to version ${VERSION}",            //commit message
                         'main'                                      //branch
